@@ -1,3 +1,5 @@
+
+```mermaid
 flowchart TD
     subgraph Clients["Aplikacje"]
         Mobile["Aplikacja mobilna<br>React Native + Expo + JavaScript"]
@@ -32,3 +34,4 @@ flowchart TD
     API -->|"Powiadomienie po zatwierdzeniu przelewu"| Push
     Push --> Delivery
     Delivery --> Mobile
+```
