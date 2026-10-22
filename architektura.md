@@ -18,13 +18,10 @@ flowchart TD
     end
 
     Mobile -->|"Logowanie i odświeżanie sesji"| Auth
-    Web -->|"Logowanie i odświeżanie sesji"| Auth
 
     Mobile -->|"Operacje z tokenem JWT"| API
-    Web -->|"Operacje z tokenem JWT"| API
 
     Mobile -->|"Odczyt własnych danych przez API z RLS"| DB
-    Web -->|"Odczyt własnych danych przez API z RLS"| DB
 
     API -->|"Weryfikacja tożsamości i uprawnień"| Auth
     API -->|"Wywołanie operacji"| Functions
