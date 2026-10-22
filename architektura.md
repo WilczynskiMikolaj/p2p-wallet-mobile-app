@@ -1,9 +1,8 @@
 
 ```mermaid
 flowchart TD
-    subgraph Clients["Aplikacje"]
+    subgraph Clients["Aplikacja"]
         Mobile["Aplikacja mobilna<br>React Native + Expo + JavaScript"]
-        Web["Przyszła aplikacja webowa<br>Next.js"]
     end
 
     subgraph Backend["Backend — Supabase"]
