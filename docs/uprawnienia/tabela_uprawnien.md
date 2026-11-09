@@ -1,0 +1,7 @@
+
+| Uprawnienie | Po co aplikacja go potrzebuje? | Kiedy prosi o zgodę? | Co się dzieje po odmowie? |
+| :--- | :---: | :---: | :---: |
+| Kamera | Odczyt kodu QR prośby o płatność przez expo-camera. | Użytkownik otwiera Skanuj QR | Skanowanie aparatem nie działa. Użytkownik może wkleić tekst kodu QR ręcznie. Po trwałej odmowie można otworzyć ustawienia systemowe albo korzystać z wklejania tekstu.|
+| Kontakty | Wybór adresu e-mail odbiorcy przez systemowy picker expo-contacts. Aplikacja odczytuje wybrany kontakt i jego e-maile;  | Po wybraniu Wybierz z kontaktów przy przelewie. Przed otwarciem pickera aplikacja prosi system o uprawnienie do odczytu kontaktów. | Można ręcznie wpisać e-mail odbiorcy. Po wyborze kontaktu bez e-maila aplikacja informuje o tym i pozwala na ręczne wpisanie adresu. |
+| Powiadomienia | Powiadomienie o otrzymanym przelewie. | Po wejściu w Powiadomienia i naciśnięciu Włącz powiadomienia push. | Nie są wysyłane powiadomienia push. Skrzynka powiadomień w aplikacji i historia nadal działają po zalogowaniu i połączeniu z internetem. |
+| Dostęp do internetu | Logowanie i pobieranie danych z Supabase, przelewy i historia, sprawdzanie próśb QR, synchronizacja skrzynki oraz rejestracja urządzenia push. | Nie ma osobnego okna zgody podczas działania aplikacji. Android deklaruje standardowe uprawnienie sieciowe w manifeście; | Bez internetu nie można pobrać ani zatwierdzić przelewu. Zapisana próba pozostaje w bezpiecznym magazynie do sprawdzenia/ponowienia. Ekrany zgłaszają problem z połączeniem; aplikacja nie wykonuje przelewu offline. |
