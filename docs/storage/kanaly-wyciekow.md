@@ -1,11 +1,11 @@
 
 | Kanał | Dotyczy nas | Co tam trafia teraz | Jak zamkniemy | Jak sprawdzimy |
 | :--- | :---: | :---: | :---: | :---: |
-| Token sesji | WhenUnlockedThisDeviceOnly, SecureStore | Poufne | Tak | SupabaseAuth|
-| Historia Tansakcji | SQL | Poufne | Nie | Tekst |
-| Saldo | SQL | Poufne | Nie | Tekst |
-| Dane Profilu | Tekst | Poufne | Tak | Tekst |
-| Preferencje | Tekst | Wewnętrzne | Tak | Tekst |
-|  | Tekst | Tekst | Tekst | Tekst |
-| Historia Tansakcji | Tekst | Tekst | Tekst | Tekst |
-
+| Logi aplikacji i Logcat | Tak | W raporcie emulatora z 09.11 nie zauważono poufnych danych | Nie logować nagłówka Authorization, haseł, OTP, e-maili, QR ani ciał żądań. | Testowe konto i testowy przelew; przegląd Logcat i logów |
+| Kopia zapasowa | Tak | SecureStore używa zaszyfrowanych wpisów w SharedPreferences/SecureStore. | ustawić android.allowBackup: false, ponieważ projekt nie wymaga odtwarzania danych | Sprawdzić zrzut/manifest finalnego APK i reguły data-extraction-rules / full-backup-content; |
+| Zrzuty ekranu | Tak | Podczas wyświetlania mogą być widoczne saldo, e-mail i historia; | Rozważyć expo-screen-capture lub własną konfigurację | Zrób screenshot, nagranie i otwórz przełącznik aplikacji na buildzie testowym. |
+| Schowek| Tak| Brak automatycznego zapisu/odczytu schowka. Po użyciu Udostępnij kod jako tekst system dostaje p2pwallet://request/{UUID}. | Nie kopiować tokenów, e-maili ani kwot. Dawać jawny przycisk udostępniania, stosować krótko żyjący UUID prośby QR (15 min) i po wygaśnięciu odrzucać go po stronie serwera. | Udostępnij testowy QR do schowka/aplikacji testowej i sprawdź treść. Potwierdź, że znajduje się tylko URI i UUID, a nie kwota/sesja. |
+| Klawiatura | Tak | Hasło logowania/rejestracji używa secureTextEntry; e-mail może użyć systemowego autofill. Kwota i tytuł przelewu są wpisywane na klawiaturze. Kod aplikacji nie zapisuje historii klawiatury. | Dla pól poufnych wyłączyć autokorektę, jeśli niepotrzebna; nie proponować zapamiętywania kwoty/tytułu; nie wpisywać OTP/tokenów w polach innych niż przeznaczone. | Obserwacja sugestii po wpisaniu wyłącznie testowej treści. |
+| Cache HTTP i WebView | Tak | W raporcie „przed” są app_webview/Default/Cookies* oraz cache/http-cache/* | Nie dodawać WebView bez uzasadnienia. Dla przyszłych odpowiedzi transakcyjnych unikać persistent cache. | Na czystym buildzie otwórzenie funkcji aplikacji testowej, porównanie listy/rozmiarów przed i po |
+| Pliki tymczasowe | Tak | Zaobserwowano BridgelessReactNativeDevBundle.js, flagę profileInstalled i pozostałe cache. | Nie odkładać żądań/odpowiedzi do zwykłego katalogu files/cache. | Run-as na debug buildzie do listy nazw/rozmiarów, wyszukanie plików .db, .sqlite, eksporty i plików tymczasowch. |
+| Powiadomienia | Tak | Backend kolejki wysyła treść ogólną „Otrzymano przelew”; bez nazwy, kwoty i ID transakcji. | Zostawić minimalną treść. Umożliwić zmianę zgody systemowej; wylogowanie usuwa rejestrację/token, a aplikacja wywołuje dismissAllNotificationsAsync. | Włączenie push na koncie testowym, wysłanie testowego przelewu, sprawdzenie centrum/ekran blokady, logout i usunięcia powiadomień. |

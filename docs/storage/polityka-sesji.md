@@ -1,11 +1,6 @@
-
-| Zdarzenie | Co usuwamy | Gdzie (magazyn) | Co zostaje | Jak sprawdzimy |
-| :--- | :---: | :---: | :---: | :---: |
-| Token sesji | WhenUnlockedThisDeviceOnly, SecureStore | Poufne | Tak | SupabaseAuth|
-| Historia Tansakcji | SQL | Poufne | Nie | Tekst |
-| Saldo | SQL | Poufne | Nie | Tekst |
-| Dane Profilu | Tekst | Poufne | Tak | Tekst |
-| Preferencje | Tekst | Wewnętrzne | Tak | Tekst |
-|  | Tekst | Tekst | Tekst | Tekst |
-| Historia Tansakcji | Tekst | Tekst | Tekst | Tekst |
-
+| Zdarzenie | Co usuwamy / unieważniamy | Gdzie (magazyn / serwer) | Co zostaje | Jak sprawdzimy |
+| --- | --- | --- | --- | --- |
+| Wylogowanie | Lokalna sesja Supabase; rejestracja push tego urządzenia na serwerze; lokalny token push; wyświetlone powiadomienia systemowe. | SecureStore; push_devices w Supabase; | Oczekująca próba przelewu może pozostać w pending-payment-{userId} do ponownego zalogowania | Wykonanie wylogowania online na koncie testowym; sprawdzenie ekranu logowania, pusty push token, brak powiadomień systemowych. Osobno sprawdzenie stanu testowej oczekującej próby. |
+| Wygaśnięcie sesji | Access token powinien zostać odświeżony przez Supabase Auth; nie kasujemy sesji przy samym upływie access tokenu. | Sesja Supabase w SecureStore; HTTPS do Supabase Auth. | Odświeżony access token i ważny refresh token pozostają w sesji. | Test na koncie testowym: poczekam do wygaśnięcia access tokenu przy aktywnej aplikacji, wykonam żądanie i sprawdze odnowienia bez zapisywania wartości tokenu.|
+| Zmiana hasła na serwerze | W obecnym kodzie brak funkcji, że zmiana hasła automatycznie usuwa wszystkie lokalne lub inne urządzenia sesje. Zależne od Supabase Auth. | Supabase Auth | Obecny refresh token może pozostać ważny, zależnie od ustawień i akcji serwera. | Na koncie testowym zmiana hasła przez Supabase, przetestowanie obecnej sesji i osobnej sesję na innym urządzeniu.|
+| **Odinstalowanie Androida** | SecureStore i aplikacyja jest usuwana wraz z pakietem; Android Keystore usuwa klucz aplikacji. | Android. | Serwerowe konto, transakcje i skrzynka pozostają w Supabase. | Odinstalowanie debug build, zainstalowanie ponownie i sprawdzenie logowanie. |
