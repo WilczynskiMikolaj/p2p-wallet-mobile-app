@@ -1,5 +1,3 @@
-// Wyłącznie publiczne, fikcyjne dane demonstracyjne.
-// Kwoty zapisujemy w groszach, aby nie operować na ułamkach waluty.
 export const demoCredentials = {
   email: 'alex@example.com',
   password: 'demo1234',
@@ -19,8 +17,6 @@ export const demoWallet = {
   status: 'active',
 };
 
-// Widok historii dla UI: amountMinor jest dodatnie; direction określa kierunek.
-// Backend docelowo wyprowadzi ten widok z nadawcy i odbiorcy transakcji.
 export const demoTransactions = [
   { id: 'tx-6', counterpartyName: 'Anna Kowalska', description: 'Obiad', direction: 'outgoing', amountMinor: 2500, createdAt: '2026-10-22T10:30:00Z' },
   { id: 'tx-5', counterpartyName: 'Jan Nowak', description: 'Zwrot za bilety', direction: 'incoming', amountMinor: 4000, createdAt: '2026-10-21T16:15:00Z' },

@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { colors } from '../theme';
 import { formatDate, formatMoney } from '../utils/format';
 
-/** @param {{ transaction: (typeof import('../data/demo').demoTransactions)[number] }} props */
+
 export default function TransactionRow({ transaction }) {
   const incoming = transaction.direction === 'incoming';
 

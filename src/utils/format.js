@@ -1,4 +1,4 @@
-/** @param {number} amountMinor */
+
 export function formatMoney(amountMinor) {
   return new Intl.NumberFormat('pl-PL', {
     style: 'currency',
@@ -6,7 +6,7 @@ export function formatMoney(amountMinor) {
   }).format(amountMinor / 100);
 }
 
-/** @param {string} value Data ISO 8601 */
+
 export function formatDate(value) {
   return new Intl.DateTimeFormat('pl-PL', {
     day: '2-digit', month: '2-digit', year: 'numeric',
