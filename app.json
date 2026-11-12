@@ -16,13 +16,31 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "package": "com.anonymous.p2pwalletmobileapp"
+      "blockedPermissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.WRITE_CONTACTS"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Pozwól P2P Wallet skanować kody QR płatności.",
+          "recordAudioAndroid": false
+        }
+      ],
+      [
+        "expo-contacts",
+        {
+          "contactsPermission": "Pozwól wybrać odbiorcę przelewu z kontaktów."
+        }
+      ],
+      "expo-notifications",
+      "expo-secure-store"
     ],
     "scheme": "p2pwallet"
   }

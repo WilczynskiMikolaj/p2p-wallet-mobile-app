@@ -1,14 +1,22 @@
-import { StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors } from '../theme';
-
+import { StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { colors } from "../theme";
 
 export default function Screen({ children, withHeader = false }) {
   return (
-    <SafeAreaView edges={withHeader ? ['left', 'right', 'bottom'] : ['top', 'left', 'right', 'bottom']} style={styles.screen}>
+    <SafeAreaView
+      edges={
+        withHeader
+          ? ["left", "right", "bottom"]
+          : ["top", "left", "right", "bottom"]
+      }
+      style={styles.screen}
+    >
       {children}
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({ screen: { flex: 1, backgroundColor: colors.background } });
+const styles = StyleSheet.create({
+  screen: { flex: 1, backgroundColor: colors.background },
+});

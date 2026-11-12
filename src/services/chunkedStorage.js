@@ -1,4 +1,3 @@
-
 export function createChunkedStorage(driver, newId) {
   let queue = Promise.resolve();
   
