@@ -3,7 +3,7 @@ module.exports = ({ config }) => ({
   android: {
     ...config.android,
     package: config.android?.package || process.env.ANDROID_APPLICATION_ID || 'com.p2pwallet.mobile',
-    ...(process.env.GOOGLE_SERVICES_JSON ? { googleServicesFile: process.env.GOOGLE_SERVICES_JSON } : {}),
+    googleServicesFile: process.env.GOOGLE_SERVICES_JSON || config.android?.googleServicesFile || './google-services.json',
   },
   extra: {
     ...config.extra,

@@ -1,0 +1,8 @@
+| Kategoria | Wynik | Jak szukane |
+|---|---|---|
+| Klucz w kodzie | Nie znaleziono wpisanego na stałe klucza prywatnego ani sekretu. W `src/data/demo.js:3` znaleziono jawne hasło demonstracyjne. | Wyszukano `secret`, `private key`, `apikey`, `service_role` i `password`. Sprawdzono, które wartości są wpisane dosłownie, a które pochodzą ze środowiska lub Vault. |
+| Przestarzały algorytm lub tryb | Nie znaleziono. | Wyszukano `MD5`, `SHA1`, `DES`, `3DES`, `RC4` i `ECB`. |
+| Przewidywalna losowość | Nie znaleziono. Identyfikatory przelewów powstają przez `Crypto.randomUUID()` w `src/screens/TransferScreen.js:79` i `:114`. | Wyszukano `Math.random`, `Date.now` i `randomUUID`. Sprawdzono, czy czas służy do tworzenia identyfikatorów. W `worker.mjs` służy do planowania ponowień. |
+| Powtarzane wartości jednorazowe | Nie znaleziono ręcznie ustawianych IV ani nonce. Powtórzenie identyfikatora przy ponowieniu przelewu jest celowe. | Wyszukano `IV`, `nonce` i `randomUUID`. Prześledzono użycie `p_idempotency_key` w `src/services/payments.js:42`. |
+| Hasło jako zwykły skrót | Nie znaleziono lokalnego haszowania haseł. Logowanie i rejestrację obsługuje Supabase Auth. | Wyszukano `password`, `hash`, `digest` i `MD5`. Sprawdzono przekazanie hasła w `src/services/auth.js:4` i `:12`. |
+| Szyfrowanie bez integralności | Nie znaleziono własnej implementacji szyfrowania. Zapis sesji na telefonie korzysta z SecureStore (`src/services/supabase.js:20`). | Wyszukano `encrypt`, `cipher`, `AES`, `ECB`, `CBC`, `CTR` i `GCM`. Sprawdzono kod zapisu sesji. |

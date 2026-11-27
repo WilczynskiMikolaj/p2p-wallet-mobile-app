@@ -42,6 +42,17 @@
       "expo-notifications",
       "expo-secure-store"
     ],
-    "scheme": "p2pwallet"
+    "scheme": "p2pwallet",
+    "extra": {
+      "router": {
+        "asyncRoutes": {
+          "web": true
+        }
+      },
+      "eas": {
+        "projectId": "ed3ae7fa-0806-41b2-8e12-8c6ffe80c9a2"
+      }
+    },
+    "owner": "asesi"
   }
 }

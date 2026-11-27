@@ -25,10 +25,40 @@ export function userError(error) {
     PUSH_DENIED:
       "Brak zgody na powiadomienia. Możesz zmienić ją w ustawieniach systemu.",
     PUSH_BUILD_REQUIRED:
-      "Push wymaga zainstalowanej kompilacji deweloperskiej aplikacji, poza Expo Go.",
+      "Otwórz własną kompilację aplikacji na urządzeniu. Push jest niedostępny w Expo Go i w przeglądarce.",
     PUSH_PROJECT_REQUIRED:
-      "Skonfiguruj identyfikator projektu EAS zgodnie z instrukcją etapu 3.",
+      "Brakuje identyfikatora projektu EAS. Sprawdź extra.eas.projectId w konfiguracji Expo.",
+    PUSH_SETTINGS_FAILED:
+      "Nie udało się przygotować powiadomień systemowych. Sprawdź ustawienia powiadomień aplikacji.",
+    PUSH_FCM_FAILED:
+      "Urządzenie nie uzyskało tokenu FCM. Sprawdź połączenie, Usługi Google Play i konfigurację Firebase w APK.",
+    PUSH_APNS_FAILED:
+      "Urządzenie nie uzyskało tokenu APNs. Sprawdź połączenie i konfigurację push dla iOS.",
+    PUSH_EXPO_FAILED:
+      "Urządzenie ma token systemowy, ale rejestracja w Expo nie powiodła się. Sprawdź połączenie i identyfikator projektu EAS.",
+    PUSH_STORAGE_FAILED:
+      "Nie udało się zapisać tokenu push w bezpiecznym magazynie urządzenia.",
+    PUSH_REGISTER_FAILED:
+      "Uzyskano token Expo, ale aplikacja nie potwierdziła rejestracji w Supabase. Sprawdź logi stage3_register_push.",
   };
+  if (
+    value.message === "PUSH_FCM_FAILED" &&
+    /googleServicesFile|Default FirebaseApp is not initialized/i.test(
+      value.cause?.message || "",
+    )
+  )
+    return "Firebase nie uruchomił się w tej kompilacji. Sprawdź android.googleServicesFile i zainstaluj nowo zbudowany APK.";
+  if (value.message === "PUSH_REGISTER_FAILED") {
+    const message = paymentErrors.PUSH_REGISTER_FAILED;
+    const cause = value.cause || {};
+    if (cause.message === "AUTH_REQUIRED" || cause.message === "RATE_LIMIT")
+      return `${message} ${paymentErrors[cause.message]}`;
+    if (
+      typeof cause.code === "string" &&
+      /^(?:[0-9A-Z]{5}|PGRST[0-9X]{3})$/.test(cause.code)
+    )
+      return `${message} Kod: ${cause.code}.`;
+  }
   if (paymentErrors[value.message]) return paymentErrors[value.message];
   const code = value.code || "";
   if (code === "invalid_credentials")

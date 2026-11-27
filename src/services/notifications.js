@@ -1,4 +1,5 @@
 import { Platform } from "react-native";
+import { isRunningInExpoGo } from "expo";
 import * as Notifications from "expo-notifications";
 import * as SecureStore from "expo-secure-store";
 import Constants from "expo-constants";
@@ -14,27 +15,54 @@ Notifications.setNotificationHandler({
   }),
 });
 const TOKEN_KEY = "p2p-push-token";
-export async function enablePush() {
-  if (Platform.OS === "web" || Constants.appOwnership === "expo")
-    throw new Error("PUSH_BUILD_REQUIRED");
+
+async function pushStep(step, action) {
+  try {
+    return await action();
+  } catch (cause) {
+    const error = new Error(step);
+    error.cause = cause;
+    throw error;
+  }
+}
+
+async function requestPushPermission() {
   if (Platform.OS === "android")
     await Notifications.setNotificationChannelAsync("transfers", {
       name: "Przelewy",
       importance: 5,
     });
-  let permission = await Notifications.getPermissionsAsync();
-  if (!permission.granted)
-    permission = await Notifications.requestPermissionsAsync();
+  const permission = await Notifications.getPermissionsAsync();
+  return permission.granted
+    ? permission
+    : Notifications.requestPermissionsAsync();
+}
+
+export async function enablePush() {
+  if (Platform.OS === "web" || isRunningInExpoGo())
+    throw new Error("PUSH_BUILD_REQUIRED");
+  const permission = await pushStep(
+    "PUSH_SETTINGS_FAILED",
+    requestPushPermission,
+  );
   if (!permission.granted) throw new Error("PUSH_DENIED");
   const projectId =
     Constants.expoConfig?.extra?.eas?.projectId ??
     Constants.easConfig?.projectId;
   if (!projectId) throw new Error("PUSH_PROJECT_REQUIRED");
-  const { data: token } = await Notifications.getExpoPushTokenAsync({
-    projectId,
-  });
-  await SecureStore.setItemAsync(TOKEN_KEY, token);
-  await paymentRpc("stage3_register_push", { p_token: token });
+  const devicePushToken = await pushStep(
+    Platform.OS === "android" ? "PUSH_FCM_FAILED" : "PUSH_APNS_FAILED",
+    () => Notifications.getDevicePushTokenAsync(),
+  );
+  const { data: token } = await pushStep("PUSH_EXPO_FAILED", () =>
+    Notifications.getExpoPushTokenAsync({ projectId, devicePushToken }),
+  );
+  await pushStep("PUSH_STORAGE_FAILED", () =>
+    SecureStore.setItemAsync(TOKEN_KEY, token),
+  );
+  await pushStep("PUSH_REGISTER_FAILED", () =>
+    paymentRpc("stage3_register_push", { p_token: token }),
+  );
 }
 
 export async function disablePush() {
