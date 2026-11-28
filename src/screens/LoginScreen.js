@@ -75,6 +75,11 @@ export default function LoginScreen() {
           disabled={busy || !!configurationError}
         />
         <Button
+          title="Regulamin"
+          secondary
+          onPress={() => router.push("/terms")}
+        />
+        <Button
           title="Utwórz konto"
           secondary
           onPress={() => router.push("/register")}

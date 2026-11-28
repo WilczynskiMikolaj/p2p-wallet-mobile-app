@@ -1,3 +1,4 @@
+import { BiometricGate, useBiometrics } from "../components/BiometricGate";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { ActivityIndicator, View } from "react-native";
@@ -18,7 +19,7 @@ export default function RootLayout() {
 }
 
 function Navigation() {
-  const { session, initializing, account } = useAuth();
+  const { session, initializing } = useAuth();
   if (initializing)
     return (
       <View
@@ -35,9 +36,20 @@ function Navigation() {
       </View>
     );
   return (
+    <BiometricGate userId={session?.user.id}>
+      <Routes />
+    </BiometricGate>
+  );
+}
+
+function Routes() {
+  const { session, account } = useAuth();
+  const { blocked, cover } = useBiometrics();
+  return (
     <>
-      <NotificationEvents />
+      {!blocked && <NotificationEvents />}
       <Stack
+        screenLayout={({ children }) => (blocked ? cover : children)}
         screenOptions={{
           contentStyle: { backgroundColor: colors.background },
           headerStyle: { backgroundColor: colors.background },
@@ -70,6 +82,11 @@ function Navigation() {
             <Stack.Screen name="admin" options={{ title: "Administrator" }} />
           </Stack.Protected>
         </Stack.Protected>
+        <Stack.Screen name="terms" options={{ title: "Regulamin" }} />
+        <Stack.Screen
+          name="request/[id]"
+          options={{ title: "Prośba o płatność" }}
+        />
       </Stack>
     </>
   );

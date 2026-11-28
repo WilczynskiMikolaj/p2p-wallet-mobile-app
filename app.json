@@ -40,7 +40,13 @@
         }
       ],
       "expo-notifications",
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Odblokuj P2P Wallet za pomocą Face ID."
+        }
+      ]
     ],
     "scheme": "p2pwallet",
     "extra": {

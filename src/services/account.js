@@ -51,3 +51,21 @@ export async function fetchAdminAccounts(offset = 0) {
   if (error) throw error;
   return data || [];
 }
+
+export async function applyAdminAction(operation, target, action, amount) {
+  const { error } = await getSupabase().rpc("stage5_admin_apply", {
+    p_operation: operation,
+    p_target: target,
+    p_action: action,
+    p_amount: amount,
+  });
+  if (error) throw error;
+}
+
+export async function fetchAdminLog(page) {
+  const { data, error } = await getSupabase().rpc("stage5_admin_log", {
+    p_offset: page * 50,
+  });
+  if (error) throw error;
+  return data;
+}

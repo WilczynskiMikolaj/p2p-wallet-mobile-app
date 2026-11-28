@@ -1,3 +1,5 @@
+import { router } from "expo-router";
+import { useBiometrics } from "../components/BiometricGate";
 import { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import Screen from "../components/Screen";
@@ -11,6 +13,7 @@ import { userError } from "../utils/errors";
 
 export default function ProfileScreen() {
   const { session, account, reloadAccount, signOut } = useAuth();
+  const bio = useBiometrics();
   const [draftName, setName] = useState(null);
   const name = draftName ?? account?.profile.display_name ?? "";
   const [busy, setBusy] = useState(false);
@@ -82,6 +85,26 @@ export default function ProfileScreen() {
               onPress={save}
               disabled={busy}
             />
+            <Button
+              title="Regulamin"
+              secondary
+              onPress={() => router.push("/terms")}
+            />
+            {bio.available && (
+              <Button
+                secondary
+                title={
+                  bio.enabled
+                    ? "Wyłącz blokadę biometryczną"
+                    : "Włącz blokadę biometryczną"
+                }
+                onPress={bio.authenticate}
+                disabled={bio.busy}
+              />
+            )}
+            {bio.message ? (
+              <Text style={authStyles.note}>{bio.message}</Text>
+            ) : null}
             <Button
               title="Wyloguj z tego urządzenia"
               secondary

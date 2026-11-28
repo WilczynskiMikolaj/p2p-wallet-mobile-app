@@ -36,7 +36,11 @@ export default function TransferScreen() {
   const load = useCallback(
     async (userId) => {
       const pending = await readPending(userId);
-      if (pending) return { pending };
+      if (pending)
+        return {
+          pending,
+          differentRequest: !!requestId && requestId !== pending.requestId,
+        };
       return { request: requestId ? await getRequest(requestId) : null };
     },
     [requestId],
@@ -169,6 +173,12 @@ function TransferForm({ initial }) {
         </>
       ) : draft ? (
         <>
+          {initial.differentRequest && (
+            <Text style={styles.error}>
+              Masz wcześniejszy przelew do sprawdzenia. Poniżej widzisz jego
+              dane. Po wyjaśnieniu tej operacji ponownie otwórz otrzymany link.
+            </Text>
+          )}
           <Text style={styles.text}>Odbiorca: {draft.displayName}</Text>
           <Text selectable style={styles.hint}>
             Identyfikator: {draft.userId}
